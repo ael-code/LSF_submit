@@ -1,7 +1,6 @@
 #!/bin/bash
 
 job_template(){
-
     cat <<-EOF
 		#BSUB -J ${name="NAME"}
 		#BSUB -oo ${out_folder:-"out/"}${name}_%J.out
@@ -17,6 +16,15 @@ job_template(){
 	EOF
 }
 
+submit(){
+	if [ -z ${TEST} ]; then
+		job_template | bsub
+	else
+		job_template
+	fi
+}
+
+
 name="job_name"
 exe="echo 'some heavy work'"
 #pnum=1
@@ -26,11 +34,7 @@ exe="echo 'some heavy work'"
 
 
 #for i in 1 2 4 8 16; do
-#    for j in `seq 1`; do
-		if [ -z ${TEST} ]; then
-			job_template | bsub
-		else
-			job_template
-		fi
-#    done
+#	for j in `seq 1`; do
+		submit
+#	done
 #done
